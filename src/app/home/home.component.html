@@ -1,0 +1,19 @@
+<h1>Registration Form</h1>
+<div>
+    <form [formGroup]="regForm" (ngSubmit)="register(regForm)"> 
+<div>
+    First name: <input type="text" placeholder="enter the name" formControlName="firstName"/>
+</div>
+<div>
+    last name: <input type="text" placeholder="enter the lastname" formControlName="lastName"/>
+</div>
+<div>
+    description: <input type="text" placeholder="enter the description" formControlName="description"/>
+</div>
+<div>
+    skills: <input type="text" placeholder="enter the skills" formControlName="skills"/>
+</div>
+<button type="submit">register</button>
+    </form>
+    {{regForm.value.firstName}}
+</div>
