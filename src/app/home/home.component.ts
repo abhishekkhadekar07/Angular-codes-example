@@ -1,10 +1,11 @@
+import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [ReactiveFormsModule],
+  imports: [ReactiveFormsModule,CommonModule],
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss',
   
@@ -31,16 +32,14 @@ initRegForm(){
   // })
 //second approach
   this.regForm=this.fb.group({
-    firstName:[''],
-      lastName:[''],
-      description:[''],
-      skills:['']
+    firstName:['',[Validators.required,Validators.maxLength(10),Validators.minLength(1)]],
+      lastName:['',[Validators.required,Validators.maxLength(10),Validators.minLength(1)]],
+      description:['',[Validators.required,Validators.maxLength(10),Validators.minLength(1),]],
+      
+      skills:['',[Validators.required,Validators.maxLength(10),Validators.minLength(1)]]
   })
 
 }
-
-
-
 register(form:FormGroup) {
     console.log(form.value);   
   }
