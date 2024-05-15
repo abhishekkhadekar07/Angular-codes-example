@@ -1,20 +1,38 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { DetailsComponent } from '../details/details.component';
 
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [ReactiveFormsModule,CommonModule],
+  imports: [ReactiveFormsModule,CommonModule,DetailsComponent],
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss',
   
 })
 export class HomeComponent {
   regForm!:FormGroup;
+  passedDataFromChildToParent1!:string;
+  passedDataFromChildToParent!:string;
+  @Input() Fname!:string;
+  @Input() title!:string;
   
  constructor(private fb:FormBuilder){
 
+ }
+ //this we called in child
+ parentFunction(data:any){
+  console.log(data);
+this.passedDataFromChildToParent1=data;
+
+
+  
+ }
+
+ passDataFromChildToParent(data1:any){
+  console.log("passDataFromChildToparent",data1);
+  this.passedDataFromChildToParent=data1
  } 
 
 isshow:boolean=true;

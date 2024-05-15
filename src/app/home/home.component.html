@@ -25,4 +25,16 @@
 <button type="submit">register</button>
     </form>
     {{regForm.value.firstName}}
+
+    <h1>Name:{{Fname}}</h1>
+    <h1>title:{{title}}</h1>
+
+    <div>
+        <app-details [firstName]="regForm.value.firstName" [lastName]="regForm.value.lastName"  [skills]="regForm.value.skills" (parentFunction)="parentFunction($event)" (passDataFromChildToParent)="passDataFromChildToParent($event)" [description]="regForm.value.description" />
+    </div>
+    <h1>output propertyuse</h1>
+    {{passedDataFromChildToParent1}}
+    <div>passedDataFromChildToParent11</div>
+  {{passedDataFromChildToParent}}
+
 </div>
