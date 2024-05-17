@@ -4,7 +4,7 @@
 </main>
 <app-home [Fname]="FirstName" [title]="title"/>
 
- title = 'test';
+<!--  title = 'test';
   dataReceivedFromThird: any[] = [];
   bgclr = 'red';
 
@@ -26,4 +26,33 @@
     console.log('receivedDataThree', receivedDataThree);
     this.dataReceivedFromThird = receivedDataThree;
   }
+
+  FOR CHILD FILE 
+  <!-- <input type="text" [value]="isinput" (input)="onChange($event)"> -->
+<!-- alternate way of doing binding is to use ngModels -->
+<!-- <input type="text" [(ngModel)]="isinput">
+<input type="text" [(ngModel)]="isInput2"> -->
+<!-- <input type="text" [value]="isinput" (input)="onChange($event)"> --> -->
+<!-- <h1> first input :{{isinput}}</h1>
+<h1> second input :{{isInput2}}</h1>
+<li *ngIf="IsDisabled">property no one </li> -->
+
+<!-- <ul>
+    <li *ngFor="let bank of BankNames">
+        <div *ngIf="bank.marketcap>400 ;else elseBlock">{{bank.name}}</div>
+        <ng-template #elseBlock>
+            nothing changes this now
+        </ng-template>
+    </li>
+
+
+</ul> -->
+<!-- <button [disabled]="IsDisabled">check button </button> -->
+<h1>{{ name }}</h1>
+<button (click)="sendData()">senddata</button>
+<button (click)="sendDataBankNames()">senddatasecondData</button>
+<button (click)="sendDatalo()">sendDataLol</button>
+
+<h1 #myHeading>hello abhishek</h1>
+
 <router-outlet />
