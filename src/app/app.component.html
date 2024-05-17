@@ -4,5 +4,26 @@
 </main>
 <app-home [Fname]="FirstName" [title]="title"/>
 
+ title = 'test';
+  dataReceivedFromThird: any[] = [];
+  bgclr = 'red';
 
+  users: User[] = [
+    { email: 'abhishek', password: 'pass' },
+    { email: 'sunil', password: 'suni@123' },
+  ];
+
+  product: Product = { name: 'abhishek', price: 2, warranty: 7 };
+
+  receivedData(receivedData: string) {
+    console.log('receivedData', receivedData);
+  }
+  receivedDataTwo(receivedDataTwo: string) {
+    console.log('receivedDataTwo', receivedDataTwo);
+  }
+
+  receivedDataThree(receivedDataThree: any[]) {
+    console.log('receivedDataThree', receivedDataThree);
+    this.dataReceivedFromThird = receivedDataThree;
+  }
 <router-outlet />
