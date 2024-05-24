@@ -11,6 +11,97 @@
 <!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * -->
 <!-- * * * * * * * * * * End of Placeholder  * * * * * * * * * * * * -->
 <!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * -->
+<! --in project we shoulduse-->
+<!-- import { Routes } from '@angular/router';
+import { ESignatureComponent } from './e-signature/e-signature.component';
+import { ESignatureSuccessfulComponent } from './e-signature-successful/e-signature-successful.component';
 
+export const ROUTES: Routes = [
+  {
+    path: '',
+    children: [{ path: '', component: ESignatureComponent }],
+  },
+  {
+    path: '',
+    children: [
+      { path: 'e-successful', component: ESignatureSuccessfulComponent },
+    ],
+  },
+];
+import { Routes } from '@angular/router';
 
+export const ROUTES: Routes = [
+  {
+    path: '',
+    loadChildren: () =>
+      import('./modules/index/index.routes').then((r) => r.ROUTES),
+  },
+  {
+    path: 'index_start',
+    loadChildren: () =>
+      import('./modules/index/index.routes').then((r) => r.ROUTES),
+  },
+  {
+    path: 'index-rm-link',
+    loadChildren: () =>
+      import('./modules/index/index.routes').then((r) => r.ROUTES),
+  },
+  {
+    path: 'index_location',
+    loadChildren: () =>
+      import('./modules/index/index.routes').then((r) => r.ROUTES),
+  },
+  {
+    path: 'resume',
+    loadChildren: () =>
+      import('./modules/index/index.routes').then((r) => r.ROUTES),
+  },
+  {
+    path: 'index-kycs',
+    loadChildren: () =>
+      import('./modules/index/index.routes').then((r) => r.ROUTES),
+  },
+  {
+    path: 'index-kycs-chk',
+    loadChildren: () =>
+      import('./modules/index/index.routes').then((r) => r.ROUTES),
+  },
+  {
+    path: 'index-kycs-bankver',
+    loadChildren: () =>
+      import('./modules/index/index.routes').then((r) => r.ROUTES),
+  },
+  {
+    path: 'Kyc',
+    loadChildren: () =>
+      import('./modules/kyc-fatca/kyc-fatca.routes').then((r) => r.ROUTES),
+  },
+  {
+    path: 'kyc',
+    loadChildren: () =>
+      import('./modules/kyc-fatca/kyc-fatca.routes').then((r) => r.ROUTES),
+  },
+  {
+    path: 'kyc',
+    loadChildren: () =>
+      import('./modules/kyc-fatca/kyc-fatca.routes').then((r) => r.ROUTES),
+  },
+  {
+    path: 'verify-nominee',
+    loadChildren: () =>
+      import('./modules/nominee/nominee.routes').then((r) => r.ROUTES),
+  },
+  {
+    path: 'plan',
+    loadChildren: () =>
+      import('./modules/plan/plan.routes').then((r) => r.ROUTES),
+  },
+  {
+    path: 'e-signature',
+    loadChildren: () =>
+      import('./modules/e-signature/e-signature.routes').then((r) => r.ROUTES),
+  },
+];
+
+-->
 <router-outlet />
