@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { PostServiceService } from '../../post-service.service';
 import { HttpClientModule } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
-import { error } from 'console';
+
 
 @Component({
   selector: 'app-api-responce',
@@ -13,21 +13,25 @@ import { error } from 'console';
 })
 export class ApiResponceComponent {
   posts:any;
+  
   colors = ["Red", "Blue", "White"];
   constructor(private postService:PostServiceService){
 
   } 
+
   onFetchData(){
     this.postService.getPosts().subscribe((data)=>{
-      console.log("data is fetched")
+      console.log("data is fetched",data)
       this.posts=data;
-
-
+      const filteredData=this.posts.filter((post:any)=>post.userId===1 && post.title.includes('sunt'))
+      console.log("fileteredData",filteredData)
     },
   (error)=>{
     console.log("error", error);
     
   })
+
   }
+
  
 }
