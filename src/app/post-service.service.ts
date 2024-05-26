@@ -13,4 +13,8 @@ export class PostServiceService {
     return this.http.get('https://jsonplaceholder.typicode.com/posts')
   
   }
+
+  getProducts(){
+    return this.http.get('https://dummyjson.com/products');
+  }
 }

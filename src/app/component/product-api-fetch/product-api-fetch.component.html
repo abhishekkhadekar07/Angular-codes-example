@@ -1,0 +1,10 @@
+<p>product</p>
+
+@for(product of products.products; track product.id
+){
+<div>
+    title:{{product.title}}
+</div>
+}
+
+<button (click)="onClickFetchProducts()">FetchProducts</button> 
