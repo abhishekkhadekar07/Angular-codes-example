@@ -260,3 +260,101 @@ export class TextBoxNewComponent {
     }
   }}
 
+reusable dropdown
+
+import { CommonModule } from '@angular/common';
+import { Component, Input } from '@angular/core';
+import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
+
+@Component({
+  selector: 'app-select-dropdown',
+  standalone: true,
+  imports: [CommonModule, ReactiveFormsModule],
+  templateUrl: './select-dropdown.component.html',
+  styleUrl: './select-dropdown.component.css'
+})
+export class SelectDropdownComponent {
+  @Input() config: any;
+  @Input() formGroupParent: FormGroup = new FormGroup({});
+  @Input() formGroupControlName: string = '';
+  @Input() id:string='';
+  control?: FormControl;
+
+  ngOnInit() {
+    if (this.formGroupControlName) {
+      this.control = <FormControl>(this.formGroupParent?.get(this.formGroupControlName || ''));
+    }
+  }
+
+  hasError(controlName: string, errorName: string): boolean {
+    let control = this.formGroupParent.controls[controlName];
+    if (control.touched) {
+      return control.hasError(errorName);
+    }
+    return false;
+  }
+}
+
+html
+@if(formGroupControlName && config.dropdownType != '2'){
+<ng-container [formGroup]="formGroupParent">
+  <div class="form-floating mb-4">
+    <select
+      class="{{ config.class }}"
+      formControlName="{{ formGroupControlName }}"
+      [class.disabled-element]="config.disabled"
+    >
+      <option *ngFor="let option of config.options" value="option.id">
+        {{ option.value }}
+      </option>
+    </select>
+    <label for="{{ formGroupControlName }}" class="form-label Flabel">{{
+      config.label
+    }}</label>
+    <ng-container *ngFor="let validation of config.validations">
+      <div
+        *ngIf="hasError(formGroupControlName, validation.error)"
+        class="invalid-feedback"
+      >
+        {{ validation.message }}
+      </div>
+    </ng-container>
+  </div>
+</ng-container>
+}@else if (config.dropdownType=='2') {
+<ng-container [formGroup]="formGroupParent">
+  <div class="form-floating mb-3">
+    <select
+      class="{{ config.class }}"
+      formControlName="{{ formGroupControlName }}"
+      [class.disabled-element]="config.disabled"
+      id="{{ id }}"
+    >
+      <option *ngFor="let option of config.options" value="{{ option.value }}">
+        {{ option.label }}
+      </option>
+    </select>
+    <label for="{{ id }}" class="form-label Flabel" id="{{ id + '_label' }}">{{
+      config.label
+    }}</label>
+    <ng-container *ngFor="let validation of config.validations">
+      <div
+        *ngIf="hasError(formGroupControlName, validation.error)"
+        class="invalid-feedback d-block"
+      >
+        {{ validation.message }}
+      </div>
+    </ng-container>
+  </div>
+</ng-container>
+} @else {
+<div class="form-floating mb-4">
+  <select class="{{ config.class }}" [class.disabled-element]="config.disabled">
+    <option *ngFor="let option of config.options" value="option.id">
+      {{ option.value }}
+    </option>
+  </select>
+  <label class="form-label Flabel">{{ config.label }}</label>
+</div>
+}
+
