@@ -357,4 +357,43 @@ html
   <label class="form-label Flabel">{{ config.label }}</label>
 </div>
 }
+copy text funcctionality
+import { Component } from '@angular/core';
+import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
+
+@Component({
+  selector: 'app-application-submitted',
+  standalone: true,
+  imports: [ReactiveFormsModule],
+  templateUrl: './application-submitted.component.html',
+  styleUrl: './application-submitted.component.css',
+})
+export class ApplicationSubmittedComponent {
+  detailsForm!: FormGroup;
+
+  constructor() {}
+
+  ngOnInit() {
+    this.initializeAllForms();
+  }
+  initializeAllForms() {
+    this.detailsForm = new FormGroup({
+      PIS: new FormControl('6487 1518 8756 88'),
+      Demat: new FormControl('57694930303'),
+    });
+  }
+
+  generateDematTradingReferenceNumber() {
+    console.log(
+      'generateDematTradingReferenceNumber',
+      this.detailsForm.controls['PIS'].value
+    );
+    navigator.clipboard.writeText(this.detailsForm.controls['PIS'].value);
+  }
+
+  generatePisNumber() {
+    console.log('generatePisNumber', this.detailsForm.controls['Demat'].value);
+    navigator.clipboard.writeText(this.detailsForm.controls['Demat'].value);
+  }
+}
 
