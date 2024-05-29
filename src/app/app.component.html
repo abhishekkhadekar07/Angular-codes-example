@@ -1,6 +1,1 @@
-
-<!-- <app-home [Fname]="FirstName" [title]="title"/> -->
-
-<!-- <app-api-responce/> -->
-<app-product-api-fetch/>
-<router-outlet />
+<app-geo-location-component (onClickGetLocationFunction)="getLocation($event)" (onClickGetLocationConsole)="getLocationConsole($event)" [lat]="lat" [lng]="lng" />

@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, Input } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { DetailsComponent } from '../details/details.component';
 
@@ -9,18 +9,24 @@ import { DetailsComponent } from '../details/details.component';
   imports: [ReactiveFormsModule,CommonModule,DetailsComponent],
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss',
-  
 })
 export class HomeComponent {
   regForm!:FormGroup;
+  @Output() onClickFunctionInChild=new EventEmitter();
   passedDataFromChildToParent1!:string;
   passedDataFromChildToParent!:string;
   @Input() Fname!:string;
   @Input() title!:string;
   
+  @Output() onClickSecondFunctionInChild=new EventEmitter();
+
  constructor(private fb:FormBuilder){
 
  }
+
+handleFunctionInChildTwo(event:any){
+  this.onClickSecondFunctionInChild.emit(event)
+}
  //this we called in child
  parentFunction(data:any){
   console.log(data);

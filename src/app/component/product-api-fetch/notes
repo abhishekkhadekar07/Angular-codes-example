@@ -294,7 +294,7 @@ export class SelectDropdownComponent {
     return false;
   }
 }
-
+aa
 html
 @if(formGroupControlName && config.dropdownType != '2'){
 <ng-container [formGroup]="formGroupParent">
