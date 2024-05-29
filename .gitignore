@@ -10,7 +10,7 @@
 /node_modules
 npm-debug.log
 yarn-error.log
-
+\src\app\component\product-api-fetch\notes
 # IDEs and editors
 .idea/
 .project

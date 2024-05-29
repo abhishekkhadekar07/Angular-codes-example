@@ -2,9 +2,33 @@
 
 @for(product of products.products; track product.id
 ){
-<div>
-    title:{{product.title}}
-</div>
-}
+ @if(product){
+     <div>
+         title:{{product.title}}
+     </div>
 
+    }
+  
+}
 <button (click)="onClickFetchProducts()">FetchProducts</button> 
+
+<form [formGroup]="nextBoxForm">
+<app-text-box-new
+[formGroupParent]="nextBoxForm"
+[formGroupControlName]="'pan'"
+[config]="{
+  id: 'pan',
+  class: 'form-control',
+  type: 'text',
+  placeholder: '',
+  autocomplete: 'off',
+  inputType: '',
+  label: 'Enter PAN',
+  validations: [
+    { error: 'required', message: 'Enter Your PAN Card No.' },
+    { error: 'isInvalidPanCardNo', message: 'Invalid PAN Card No.' }
+  ],
+}"
+onChange="handleChange($even)"
+/>
+</form>

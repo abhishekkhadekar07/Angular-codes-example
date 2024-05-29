@@ -1,0 +1,399 @@
+<!-- for controls that strictly requires FormControl  -->
+<ng-container *ngIf="formGroupControlName" [formGroup]="formGroupParent">
+  <div class="form-floating" *ngIf="config.mb4" [class.mb-4]="!config.mb4">
+    <div
+      class="form-floating"
+      [class.mb-2]="!config.mb2"
+      [class.opacity-75]="config.disabled"
+    >
+      <h5
+        *ngIf="config.disabled"
+        class="fetch2 Flabel"
+        [class.NMlblbg]="config.disabled"
+      >
+        {{ config.label }}
+      </h5>
+      <input
+        type="text"
+        class="{{ config.class }}"
+        [class.disabled-input]="config.disabled"
+        autocomplete="off"
+        formControlName="{{ formGroupControlName }}"
+        placeholder=""
+        id="{{ config.id + id }}"
+        [readonly]="config.disabled"
+        [class.on-error]="
+          config.validations &&
+          !isControlInvalid(
+            formGroupControlName,
+            'error',
+            config.validateOnStart
+          )
+        "
+        [class.on-success]="
+          config.validations &&
+          isControlInvalid(
+            formGroupControlName,
+            'success',
+            config.validateOnStart
+          )
+        "
+        maxlength="{{ config.maxlength }}"
+        (input)="handleInput($event)"
+        (change)="handleChange($event)"
+      />
+      <label
+        for="{{ config.id + id }}"
+        *ngIf="!config.disabled"
+        class="form-label Flabel"
+        >{{ config.label }}</label
+      >
+
+      @if(config?.externalErr){
+      <div class="invalid-feedback d-block">
+        {{ config.externalErr }}
+      </div>
+
+      }@else{
+      <ng-container *ngFor="let validation of config.validations">
+        <div
+          [class.visible-error]="
+            hasError(
+              formGroupControlName,
+              validation.error,
+              config.validateOnStart
+            )
+          "
+          class="invalid-feedback animated-div"
+        >
+          {{ validation.message }}
+        </div>
+      </ng-container>
+      }
+    </div>
+  </div>
+</ng-container>
+
+<!-- for controls that doesn't require any FormControl  -->
+<div *ngIf="!formGroupControlName" class="form-floating mb-4">
+  <div class="form-floating mb-2" [class.opacity-75]="config.disabled">
+    <h5
+      *ngIf="config.disabled"
+      class="fetch2 Flabel"
+      [class.NMlblbg]="config.disabled"
+    >
+      {{ config.label }}
+    </h5>
+    <input
+      type="text"
+      class="{{ config.class }}"
+      [class.disabled-input]="config.disabled"
+      id="{{ config.id + id }}"
+      autocomplete="off"
+      value="{{ config.value }}"
+      placeholder=""
+      [readonly]="config.disabled"
+    />
+    <label
+      for="{{ config.id + id }}"
+      *ngIf="!config.disabled"
+      class="form-label Flabel"
+      >{{ config.label }}</label
+    >
+  </div>
+</div>
+
+<!-- How to use
+<app-text-box-new 
+[formGroupParent]="personalDetails.get('personal')"
+[formGroupControlName]="'prefix'"
+[config]="{
+class: 'form-control',
+id: 'mpfname',
+label: 'Prefix',
+disabled: false,
+validations: [{error: 'required', message: 'Please enter Prefix'}]
+
+or
+
+  <app-text-box-new
+    [formGroupParent]="formGroup"
+    [formGroupControlName]="'pan'"
+    [config]="{
+      id: 'pan',
+      class: 'form-control',
+      type: 'text',
+      placeholder: '',
+      autocomplete: 'off',
+      inputType: '',
+      label: 'Enter PAN',
+      validations: [
+        { error: 'required', message: 'Enter Your PAN Card No.' },
+        { error: 'isInvalidPanCardNo', message: 'Invalid PAN Card No.' }
+      ],
+      externalErr: errDuplicatePan
+    }"
+    onChange="handleChange($even)"
+  />
+}"/> -->
+
+<!-- Explanation
+1)  [formGroupParent] is the FormGroup under which the date control is present.
+    If you have FormGroup under FormGroup use "personalDetails.get('personal')".
+    Here personalDetails is the main FormGroup and inside that personal is the nested FormGroup.
+2)  [formGroupControlName] is nothing but the FormControl to which you need to apply the DatePicker.
+3)  [config] is the configuration for label, class, etc. -->
+
+<!-- How to add any event
+1)  In this component's ts file add an @OutPut EventEmitter as below
+    Example: @Output() inputChange: EventEmitter<any> = new EventEmitter<any>();
+2)  Now, in this file to the <input /> add any function call as below   
+    Example:  <input (inputChange)="onMobileChange($event)" />
+3)  Define inputChange() function in this components ts file and call the emit function from the 
+    EventEmitter created in the first step as below
+    Example: onInputChange($event: any){
+    this.inputChange.emit($event);
+    } 
+4)  Now, in the parent component's html file where this component is called, in the component tag
+    call the event that is created in this component ts file, name should be same as the EventEmitter as below 
+    <app-country-code-text-box (inputChange)="onMobileChange($event)" /> 
+5)  Define the onMobileChange() funtion in the parent component 
+
+    When the change event in the app-country-code-text-box happens, beacuse of the EventEmitter setup we did
+    the parent component function is called.
+    This gives us flexibility to call any event of the app-country-code-text-box in the parent component
+
+Note: Each event needs to have a seperate EventEmitter.
+      We can create the EventEmitter as per our requirement -->
+
+ts file
+import { CommonModule } from '@angular/common';
+import { Component, Input ,Output,EventEmitter} from '@angular/core';
+import { FormControl, ReactiveFormsModule } from '@angular/forms';
+
+@Component({
+  selector: 'app-text-box-new',
+  standalone: true,
+  imports: [CommonModule, ReactiveFormsModule],
+  templateUrl: './text-box-new.component.html',
+  styleUrl: './text-box-new.component.css',
+})
+export class TextBoxNewComponent {
+  @Input() formGroupParent!: any;
+  @Input() formGroupControlName!: string;
+  @Input() config: any;
+  @Output() onChange = new EventEmitter();
+  @Output() onInput = new EventEmitter();
+
+
+
+  control?: FormControl;
+  isError = false;
+  id = this.generateRandom3DigitString();
+
+  ngOnInit() {
+    if (this.formGroupControlName) {
+      this.control = <FormControl>(
+        this.formGroupParent?.get(this.formGroupControlName || '')
+      );
+    }
+  }
+
+  hasError(
+    controlName: string,
+    errorName: string,
+    validateOnStart: boolean
+  ): boolean {
+    let control = this.formGroupParent.controls[controlName];
+    if (validateOnStart) {
+      return control.hasError(errorName);
+    }
+    if (control.touched) {
+      return control.hasError(errorName);
+    }
+    return false;
+  }
+
+  isControlInvalid(
+    controlName: string,
+    param: string,
+    validateOnStart: boolean
+  ) {
+    let control = this.formGroupParent.controls[controlName];
+    if (param === 'error') {
+      if (validateOnStart) {
+        return control.valid;
+      }
+      if (control.touched) {
+        return control.valid;
+      } else {
+        return true;
+      }
+    } else if (param === 'success') {
+      if (validateOnStart) {
+        return control.valid;
+      }
+      if (control.touched) {
+        return control.valid;
+      } else {
+        return false;
+      }
+    }
+  }
+
+  generateRandom3DigitString(): string {
+    const randomNumber = Math.floor(Math.random() * 1000);
+    const stringValue = randomNumber.toString().padStart(3, '0');
+    return stringValue;
+  }
+
+  handleInput(e: any) {
+    if (this.onInput) {
+      this.onInput.emit(e);
+    }
+  }
+
+
+  handleChange(event: any) {
+    if (this.onChange) {
+      this.onChange.emit(event);
+    }
+  }}
+
+reusable dropdown
+
+import { CommonModule } from '@angular/common';
+import { Component, Input } from '@angular/core';
+import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
+
+@Component({
+  selector: 'app-select-dropdown',
+  standalone: true,
+  imports: [CommonModule, ReactiveFormsModule],
+  templateUrl: './select-dropdown.component.html',
+  styleUrl: './select-dropdown.component.css'
+})
+export class SelectDropdownComponent {
+  @Input() config: any;
+  @Input() formGroupParent: FormGroup = new FormGroup({});
+  @Input() formGroupControlName: string = '';
+  @Input() id:string='';
+  control?: FormControl;
+
+  ngOnInit() {
+    if (this.formGroupControlName) {
+      this.control = <FormControl>(this.formGroupParent?.get(this.formGroupControlName || ''));
+    }
+  }
+
+  hasError(controlName: string, errorName: string): boolean {
+    let control = this.formGroupParent.controls[controlName];
+    if (control.touched) {
+      return control.hasError(errorName);
+    }
+    return false;
+  }
+}
+
+html
+@if(formGroupControlName && config.dropdownType != '2'){
+<ng-container [formGroup]="formGroupParent">
+  <div class="form-floating mb-4">
+    <select
+      class="{{ config.class }}"
+      formControlName="{{ formGroupControlName }}"
+      [class.disabled-element]="config.disabled"
+    >
+      <option *ngFor="let option of config.options" value="option.id">
+        {{ option.value }}
+      </option>
+    </select>
+    <label for="{{ formGroupControlName }}" class="form-label Flabel">{{
+      config.label
+    }}</label>
+    <ng-container *ngFor="let validation of config.validations">
+      <div
+        *ngIf="hasError(formGroupControlName, validation.error)"
+        class="invalid-feedback"
+      >
+        {{ validation.message }}
+      </div>
+    </ng-container>
+  </div>
+</ng-container>
+}@else if (config.dropdownType=='2') {
+<ng-container [formGroup]="formGroupParent">
+  <div class="form-floating mb-3">
+    <select
+      class="{{ config.class }}"
+      formControlName="{{ formGroupControlName }}"
+      [class.disabled-element]="config.disabled"
+      id="{{ id }}"
+    >
+      <option *ngFor="let option of config.options" value="{{ option.value }}">
+        {{ option.label }}
+      </option>
+    </select>
+    <label for="{{ id }}" class="form-label Flabel" id="{{ id + '_label' }}">{{
+      config.label
+    }}</label>
+    <ng-container *ngFor="let validation of config.validations">
+      <div
+        *ngIf="hasError(formGroupControlName, validation.error)"
+        class="invalid-feedback d-block"
+      >
+        {{ validation.message }}
+      </div>
+    </ng-container>
+  </div>
+</ng-container>
+} @else {
+<div class="form-floating mb-4">
+  <select class="{{ config.class }}" [class.disabled-element]="config.disabled">
+    <option *ngFor="let option of config.options" value="option.id">
+      {{ option.value }}
+    </option>
+  </select>
+  <label class="form-label Flabel">{{ config.label }}</label>
+</div>
+}
+copy text funcctionality
+import { Component } from '@angular/core';
+import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
+
+@Component({
+  selector: 'app-application-submitted',
+  standalone: true,
+  imports: [ReactiveFormsModule],
+  templateUrl: './application-submitted.component.html',
+  styleUrl: './application-submitted.component.css',
+})
+export class ApplicationSubmittedComponent {
+  detailsForm!: FormGroup;
+
+  constructor() {}
+
+  ngOnInit() {
+    this.initializeAllForms();
+  }
+  initializeAllForms() {
+    this.detailsForm = new FormGroup({
+      PIS: new FormControl('6487 1518 8756 88'),
+      Demat: new FormControl('57694930303'),
+    });
+  }
+
+  generateDematTradingReferenceNumber() {
+    console.log(
+      'generateDematTradingReferenceNumber',
+      this.detailsForm.controls['PIS'].value
+    );
+    navigator.clipboard.writeText(this.detailsForm.controls['PIS'].value);
+  }
+
+  generatePisNumber() {
+    console.log('generatePisNumber', this.detailsForm.controls['Demat'].value);
+    navigator.clipboard.writeText(this.detailsForm.controls['Demat'].value);
+  }
+}
+

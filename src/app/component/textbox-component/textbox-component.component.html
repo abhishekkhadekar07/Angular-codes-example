@@ -1,0 +1,103 @@
+<ng-container *ngIf="formGroupControlName" [formGroup]="formGroupParent">
+    <div class="form-floating" *ngIf="config.mb4" [class.mb-4]="!config.mb4">
+      <div
+        class="form-floating"
+        [class.mb-2]="!config.mb2"
+        [class.opacity-75]="config.disabled"
+      >
+        <h5
+          *ngIf="config.disabled"
+          class="fetch2 Flabel"
+          [class.NMlblbg]="config.disabled"
+        >
+          {{ config.label }}
+        </h5>
+        <input
+          type="text"
+          class="{{ config.class }}"
+          [class.disabled-input]="config.disabled"
+          autocomplete="off"
+          formControlName="{{ formGroupControlName }}"
+          placeholder=""
+          id="{{ config.id + id }}"
+          [readonly]="config.disabled"
+          [class.on-error]="
+            config.validations &&
+            !isControlInvalid(
+              formGroupControlName,
+              'error',
+              config.validateOnStart
+            )
+          "
+          [class.on-success]="
+            config.validations &&
+            isControlInvalid(
+              formGroupControlName,
+              'success',
+              config.validateOnStart
+            )
+          "
+          maxlength="{{ config.maxlength }}"
+          (input)="handleInput($event)"
+          (change)="handleChange($event)"
+        />
+        <label
+          for="{{ config.id + id }}"
+          *ngIf="!config.disabled"
+          class="form-label Flabel"
+          >{{ config.label }}</label
+        >
+  
+        @if(config?.externalErr){
+        <div class="invalid-feedback d-block">
+          {{ config.externalErr }}
+        </div>
+  
+        }@else{
+        <ng-container *ngFor="let validation of config.validations">
+          <div
+            [class.visible-error]="
+              hasError(
+                formGroupControlName,
+                validation.error,
+                config.validateOnStart
+              )
+            "
+            class="invalid-feedback animated-div"
+          >
+            {{ validation.message }}
+          </div>
+        </ng-container>
+        }
+      </div>
+    </div>
+  </ng-container>
+  
+  <!-- for controls that doesn't require any FormControl  -->
+  <div *ngIf="!formGroupControlName" class="form-floating mb-4">
+    <div class="form-floating mb-2" [class.opacity-75]="config.disabled">
+      <h5
+        *ngIf="config.disabled"
+        class="fetch2 Flabel"
+        [class.NMlblbg]="config.disabled"
+      >
+        {{ config.label }}
+      </h5>
+      <input
+        type="text"
+        class="{{ config.class }}"
+        [class.disabled-input]="config.disabled"
+        id="{{ config.id + id }}"
+        autocomplete="off"
+        value="{{ config.value }}"
+        placeholder=""
+        [readonly]="config.disabled"
+      />
+      <label
+        for="{{ config.id + id }}"
+        *ngIf="!config.disabled"
+        class="form-label Flabel"
+        >{{ config.label }}</label
+      >
+    </div>
+  </div>
